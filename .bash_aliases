@@ -132,8 +132,8 @@ alias sha1='openssl sha1'
 # SPECIFIC ALIASES                                                                   #
 ######################################################################################
 # Alias's to change the directory.
-if [-d /home/www]; alias web='cd /var/www/' # directadmin
-if [-d /home/kayleigh/code]; alias web='cd /home/kayleigh/code' # local development
+if [ -d "/home/www" ]; then alias web='cd /var/www/' # directadmin
+elif [ -d "/home/kayleigh/code" ]; then alias web='cd /home/kayleigh/code' # local development
 else alias web='cd /var/www/'
 fi
 
@@ -152,7 +152,7 @@ alias fw='iptables -nL'
 alias fwv='iptables -nvL'
 
 # Easier copypasta for root
-if [ "$EUID" -e 0 ]
+if [ "$EUID" -e 0 ]; then
   alias sudo=''
 fi
 
