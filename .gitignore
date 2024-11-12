@@ -1,0 +1,12 @@
+# Ignore everything
+*
+
+
+# But not these files...
+!.gitignore
+!.bashrc
+!.bash_aliases
+!.dynmotd.sh
+!.bashrc_help
+
+!.config/htop/htoprc
