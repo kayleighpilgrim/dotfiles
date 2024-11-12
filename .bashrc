@@ -223,19 +223,23 @@ install_bashrc_support() {
 }
 # Show current network information.
 netinfo() {
-  printf "IPv4: "
+  printf 'IPv4: '
   /sbin/ifconfig | grep 'inet ' | grep -v '127.' | awk -F' ' '{print $2}' | tr -d '\n\t\r'
-  printf "\nIPv6: "
+  printf '\nIPv6: '
   /sbin/ifconfig | grep 'inet6' | grep -v 'fe80::' | grep -v '::1' | awk -F' ' '{print $2"  "}' | tr -d '\n\t\r'
   printf '\n'
 }
 # IP address lookup.
 alias whatismyip="whatsmyip"
 function whatsmyip() {
-  # Internal IP Lookup
-  echo -n "Internal IP: " ; /sbin/ifconfig eth0 | grep "inet addr" | awk -F: '{print $2}' | awk '{print $1}'
-  # External IP Lookup
-  echo -n "External IP: " ; wget https://api.ipify.org/ -O - -q
+  printf 'Internal:\n'
+  netinfo
+  printf 'External:\n'
+  printf 'IPv4: '
+  wget https://v4.ident.me/ -O - -q
+  printf '\nIPv6: '
+  wget https://v6.ident.me/ -O - -q
+  printf '\n'
 }
 # View Apache logs
 apachelog() {
@@ -291,7 +295,6 @@ trim() {
 
 
 
-#shopt -s globstar # If set, the pattern "**" used in a pathname expansion context will match all files and zero or more directories and subdirectories.
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
