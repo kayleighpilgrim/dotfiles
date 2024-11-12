@@ -225,9 +225,9 @@ install_bashrc_support() {
 # Show current network information.
 netinfo() {
   printf 'IPv4: '
-  /sbin/ifconfig | grep 'inet ' | grep -v '127.' | awk -F' ' '{print $2}' | tr -d '\n\t\r'
+  /sbin/ifconfig | grep 'inet ' | grep -v '127.' | awk -F' ' '{print $2}' | xargs echo -n
   printf '\nIPv6: '
-  /sbin/ifconfig | grep 'inet6' | grep -v 'fe80::' | grep -v '::1' | awk -F' ' '{print $2"  "}' | tr -d '\n\t\r'
+  /sbin/ifconfig | grep 'inet6' | grep -v 'fe80::' | grep -v '::1' | awk -F' ' '{print $2"  "}' | xargs echo -n
   printf '\n'
 }
 # IP address lookup.
