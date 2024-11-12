@@ -1,0 +1,63 @@
+conky.config = {
+  use_xft = true,
+	update_interval = 1.5,
+	total_run_times = 0,
+	own_window = true,
+	own_window_type = 'normal',
+	own_window_transparent = true,
+	own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+	own_window_colour = '000000',
+	own_window_argb_visual = false,
+	own_window_argb_value = 0,
+	double_buffer = true,
+	draw_shades = false,
+	draw_outline = false,
+	draw_borders = false,
+	draw_graph_borders = false,
+	default_color = 'white',
+	default_shade_color = 'red',
+	default_outline_color = 'green',
+	alignment = 'bottom_right',
+	gap_x = 10,
+	gap_y = 0,
+	no_buffers = true,
+	uppercase = false,
+	cpu_avg_samples = 2,
+	net_avg_samples = 1,
+	override_utf8_locale = false,
+	use_spacer = 'none',
+	minimum_width = 300,
+  minimum_height = 0
+}
+
+conky.text = [[
+${color FFFF00}${font sans-serif:bold:pixelsize=20}${execpi 3600 date -R}
+
+${color FFFF00}${font sans-serif:bold:pixelsize=20}SYSTEM${font sans-serif:normal:pixelsize=14}
+${color FF0000}Host: ${color 00FF00}${execpi 3600 hostname -f}${alignr}${color FF0000}Uptime: ${color 00FF00}${uptime}
+${color FF0000}OS: ${color 00FF00}${execpi 3600 lsb_release -a | grep 'Description' | awk -F':' '{printf $2}' | xargs echo -n}${color FF0000}  ${alignr}Kernel: ${color 00FF00}${execpi 3600 uname -srm}
+${color FFFF00}${font sans-serif:bold:pixelsize=14}NETWORK${font sans-serif:normal:pixelsize=14}
+${color FF0000}Int IPv4: ${color 00FF00}${execpi 3600 /sbin/ifconfig | grep 'inet ' | grep -v '127.' | awk -F' ' '{print $2}' | xargs echo -n}${alignr}${color FF0000}Ext IPv4: ${color 00FF00}${execpi 3600 wget https://v4.ident.me/ -O - -q | xargs echo -n}
+${color FF0000}Ext IPv6: ${color 00FF00}${execpi 3600 wget https://v6.ident.me/ -O - -q | xargs echo -n}
+${color FFFF00}${font sans-serif:bold:pixelsize=14}DISKS${font sans-serif:normal:pixelsize=14}
+${color FF0000}/ $alignc  ${color 00FF00}${fs_used /} ${color FF0000}/ ${color 00FF00}${fs_size /} $alignr ${fs_used_perc /} ${color FF0000}%
+${color FF0000}DATA $alignc  ${color 00FF00}${fs_used /home/kayleigh/data} ${color FF0000}/ ${color 00FF00}${fs_size /home/kayleigh/data} $alignr ${fs_used_perc /home/kayleigh/data} ${color FF0000}%
+${color FF0000}ENCRYPTED $alignc ${color 00FF00}${fs_used /media/kayleigh/USB} ${color FF0000}/ ${color 00FF00}${fs_size /media/kayleigh/USB} $alignr ${fs_used_perc /media/kayleigh/USB} ${color FF0000}%
+${color FFFF00}${font sans-serif:bold:pixelsize=14}STATS${font sans-serif:normal:pixelsize=14}
+${color FF0000}CPU: ${color 00FF00}${cpu cpu0}${color FF0000}% ${color 00FF00}${cpubar cpu0} 
+${color 00FF00}${acpitemp}${color FF0000}C ${color 00FF00}${freq}${color FF0000}MHz ${color FF0000}${alignc}Load: ${color 00FF00}${execpi 3600 /bin/cat /proc/loadavg | awk {'print $1'}}${color FF0000},${color 00FF00}${execpi 3600 /bin/cat /proc/loadavg | awk {'print $2'}}${color FF0000},${color 00FF00}${execpi 3600 /bin/cat /proc/loadavg | awk {'print $3'}}${color FF0000} ${alignr}Procs: ${color 00FF00}$processes${color FF0000}  Run: ${color 00FF00}$running_processes
+${color FF0000}RAM: ${color 00FF00}${execpi 3600 free -h | grep Mem | awk -F' ' '{print $4}'}${color FF0000} free (${color 00FF00}${execpi 3600 free -h | grep Mem | awk -F' ' '{print $3}'}${color FF0000}/${color 00FF00}${execpi 3600 free -h | grep Mem | awk -F' ' '{print $2}'}${color FF0000})${alignr}${color FF0000} SWAP: ${color 00FF00}${execpi 3600 free -h | grep Swap | awk -F' ' '{print $4}'}${color FF0000} free (${color 00FF00}${execpi 3600 free -h | grep Swap | awk -F' ' '{print $3}'}${color FF0000}/${color 00FF00}${execpi 3600 free -h | grep Swap | awk -F' ' '{print $2}'}${color FF0000})
+${color FF0000}Battery: ${color 00FF00}${battery_bar BAT1}
+
+${color FFFF00}${font sans-serif:bold:pixelsize=20}INFRASTRUCTURE${font sans-serif:normal:pixelsize=14}
+${color FF0000}Daemon:   ${execpi 3600 ping -c 1 daemon.abs.gd > /dev/null && echo '${color 00FF00}ONLINE' || echo '${color FF0000}OFFLINE'}
+${color FF0000}W1:            ${execpi 3600 ping -c 1 w1.abs.gd > /dev/null && echo '${color 00FF00}ONLINE' || echo '${color FF0000}OFFLINE'}
+${color FF0000}W1 HTTPS: ${execpi 3600 curl https://kayleighpilgrim.net > /dev/null && echo '${color 00FF00}ONLINE' || echo '${color FF0000}OFFLINE'}
+
+${color FFFF00}${font sans-serif:bold:pixelsize=20}WEATHER${font sans-serif:normal:pixelsize=14}
+${color FF0000}TODO
+
+${color FFFF00}${font sans-serif:bold:pixelsize=20}NOTIFICATIONS${font sans-serif:normal:pixelsize=14}
+${color FF0000}Email: TODO
+${color FF0000}Tasks: TODO
+]];
