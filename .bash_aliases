@@ -93,8 +93,9 @@ alias countfiles="for t in files links directories; do echo \`find . -type \${t:
 # To see if a command is aliased, a file, or a built-in command.
 alias checkcommand="type -t"
 
-# Show current network connections to the webserver. TODO: DOESNT WORK THIS WAY ANYMORE, ALSO ADD 443 ??
-#alias ipview="netstat -anpl | grep :80 | awk {'print \$5'} | cut -d\":\" -f1 | sort | uniq -c | sort -n | sed -e 's/^ *//' -e 's/ *\$//'"
+# Show current network connections to the webserver.
+alias 80view="netstat -anpl | grep :80 | awk {'print $5'} | cut -d":" -f1 | sort | uniq -c | sort -n | sed -e 's/^ *//' -e 's/ *\$//'"
+alias 443view="netstat -anpl | grep :443 | awk {'print $5'} | cut -d":" -f1 | sort | uniq -c | sort -n | sed -e 's/^ *//' -e 's/ *\$//'"
 
 # Show open ports.
 alias openports='netstat -nape --inet'
