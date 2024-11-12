@@ -1,7 +1,11 @@
 #!/bin/bash
 
 # ABS BashRC  -  Kayleigh Pilgrim <k@abs.gd>  -  V.0.0.1  -  2024/11/12
-# TODO: TEMPERATURES + WEATHER
+clear
+printf "\n${Yellow}LOGGING IN${Color_off}\n"
+
+
+
 
 ######################################################################################
 # COLORS                                                                             #
@@ -22,12 +26,6 @@ IBlack='\e[0;90m';IRed='\e[0;91m';IGreen='\e[0;92m';IYellow='\e[0;93m';IBlue='\e
 BIBlack='\e[1;90m';BIRed='\e[1;91m';BIGreen='\e[1;92m';BIYellow='\e[1;93m';BIBlue='\e[1;94m';BIPurple='\e[1;95m';BICyan='\e[1;96m';BIWhite='\e[1;97m'
 # High Intensity backgrounds
 On_IBlack='\e[0;100m';On_IRed='\e[0;101m';On_IGreen='\e[0;102m';On_IYellow='\e[0;103m';On_IBlue='\e[0;104m';On_IPurple='\e[0;105m';On_ICyan='\e[0;106m';On_IWhite='\e[0;107m'
-
-
-
-
-clear
-printf "\n${Yellow}LOGGING IN${Color_off}\n"
 
 
 
