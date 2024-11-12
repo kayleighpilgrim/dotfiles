@@ -4,3 +4,5 @@
 !.gitignore
 !.bashrc
 !.bash_aliases
+!.dynmotd.sh
+

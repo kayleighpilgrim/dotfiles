@@ -43,13 +43,14 @@ export LESS_TERMCAP_us=$'\E[01;32m'                                    # "
 export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01' # colored GCC warnings and errors
 export PATH="$PATH:/home/kayleigh/.local/bin"                          # pipx
 . "/home/kayleigh/.local/share/cargo/env"                              # cargo
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"           # make less more friendly for non-text input files, see lesspipe(1)
 
 
 
 
 ######################################################################################
 # SPECIAL FUNCTIONS                                                                  #
-###################################################################################### -%>
+######################################################################################
 # Use the best editor installed.
 edit() {
   if [ "$(type -t nvim)" = "file" ]; then nvim "$@"
@@ -293,60 +294,87 @@ trim() {
 
 
 
-
-
-
-# make less more friendly for non-text input files, see lesspipe(1)
-[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
-
-# set variable identifying the chroot you work in (used in the prompt below)
-if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
-    debian_chroot=$(cat /etc/debian_chroot)
-fi
-
-# set a fancy prompt (non-color, unless we know we "want" color)
-case "$TERM" in
-    xterm-color|*-256color) color_prompt=yes;;
-esac
-
-# uncomment for a colored prompt, if the terminal has the capability; turned
-# off by default to not distract the user: the focus in a terminal window
-# should be on the output of commands, not on the prompt
-force_color_prompt=yes
-
-if [ -n "$force_color_prompt" ]; then
-    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-	# We have color support; assume it's compliant with Ecma-48
-	# (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-	# a case would tend to support setf rather than setaf.)
-	color_prompt=yes
-    else
-	color_prompt=
+######################################################################################
+# Set the ultimate amazing command prompt.                                           #
+######################################################################################
+alias cpu="grep 'cpu ' /proc/stat | awk '{usage=(\$2+\$4)*100/(\$2+\$4+\$5)} END {print usage}' | awk '{printf(\"%.1f\n\", \$1)}'"
+function __setprompt
+{
+  local LAST_COMMAND=$? # Must come first!
+  # Define colors
+  local LIGHTGRAY="\033[0;37m"
+  local WHITE="\033[1;37m"
+  local BLACK="\033[0;30m"
+  local DARKGRAY="\033[1;30m"
+  local RED="\033[0;31m"
+  local LIGHTRED="\033[1;31m"
+  local GREEN="\033[0;32m"
+  local LIGHTGREEN="\033[1;32m"
+  local BROWN="\033[0;33m"
+  local YELLOW="\033[1;33m"
+  local BLUE="\033[0;34m"
+  local LIGHTBLUE="\033[1;34m"
+  local MAGENTA="\033[0;35m"
+  local LIGHTMAGENTA="\033[1;35m"
+  local CYAN="\033[0;36m"
+  local LIGHTCYAN="\033[1;36m"
+  local NOCOLOR="\033[0m"
+  # Show error exit code if there is one
+  if [[ $LAST_COMMAND != 0 ]]; then
+    PS1="\[${DARKGRAY}\](\[${LIGHTRED}\]ERROR\[${DARKGRAY}\])-(\[${RED}\]Exit Code \[${LIGHTRED}\]${LAST_COMMAND}\[${DARKGRAY}\])-(\[${RED}\]"
+    if [[ $LAST_COMMAND == 1 ]]; then PS1+="General error"
+    elif [ $LAST_COMMAND == 2 ]; then PS1+="Missing keyword, command, or permission problem"
+    elif [ $LAST_COMMAND == 126 ]; then PS1+="Permission problem or command is not an executable"
+    elif [ $LAST_COMMAND == 127 ]; then PS1+="Command not found"
+    elif [ $LAST_COMMAND == 128 ]; then PS1+="Invalid argument to exit"
+    elif [ $LAST_COMMAND == 129 ]; then PS1+="Fatal error signal 1"
+    elif [ $LAST_COMMAND == 130 ]; then PS1+="Script terminated by Control-C"
+    elif [ $LAST_COMMAND == 131 ]; then PS1+="Fatal error signal 3"
+    elif [ $LAST_COMMAND == 132 ]; then PS1+="Fatal error signal 4"
+    elif [ $LAST_COMMAND == 133 ]; then PS1+="Fatal error signal 5"
+    elif [ $LAST_COMMAND == 134 ]; then PS1+="Fatal error signal 6"
+    elif [ $LAST_COMMAND == 135 ]; then PS1+="Fatal error signal 7"
+    elif [ $LAST_COMMAND == 136 ]; then PS1+="Fatal error signal 8"
+    elif [ $LAST_COMMAND == 137 ]; then PS1+="Fatal error signal 9"
+    elif [ $LAST_COMMAND -gt 255 ]; then PS1+="Exit status out of range"
+    else PS1+="Unknown error code"
     fi
-fi
+    PS1+="\[${DARKGRAY}\])\[${NOCOLOR}\]\n"
+  else PS1=""
+  fi
+  # Date
+  PS1+="\[${DARKGRAY}\](\[${CYAN}\]\$(date +%a) $(date +%b-'%-m')" # Date
+  PS1+="${CYAN} $(date +'%-I':%M:%S%P)\[${DARKGRAY}\])-" # Time
+  # CPU
+  #PS1+="(\[${MAGENTA}\]CPU $(cpu)%"
+  #PS1+="\[${DARKGRAY}\])-"
+  # User and server
+  local SSH_IP=`echo $SSH_CLIENT | awk '{ print $1 }'`
+  local SSH2_IP=`echo $SSH2_CLIENT | awk '{ print $1 }'`
+  if [ $SSH2_IP ] || [ $SSH_IP ] ; then PS1+="(\[${RED}\]\u@\h"
+  else PS1+="(\[${RED}\]\u"; fi
+  # Current directory
+  PS1+="\[${DARKGRAY}\]:\[${BROWN}\]\w\[${DARKGRAY}\])"
+  # Total size of files in current directory
+  #PS1+="(\[${GREEN}\]$(/bin/ls -lah | /bin/grep -m 1 total | /bin/sed 's/total //')\[${DARKGRAY}\])"
+  # Number of files
+  #PS1+="\[${GREEN}\]\$(/bin/ls -A -1 | /usr/bin/wc -l) files\[${DARKGRAY}\])"
+  # Skip to the next line
+  PS1+="\n"
+  if [[ $EUID -ne 0 ]]; then PS1+="\[${GREEN}\]>\[${NOCOLOR}\] " # Normal user
+  else PS1+="\[${RED}\]>\[${NOCOLOR}\] " # Root user
+  fi
+  # PS2 is used to continue a command using the \ character
+  PS2="\[${DARKGRAY}\]>\[${NOCOLOR}\] "
+  # PS3 is used to enter a number choice in a script
+  PS3='Please enter a number from above list: '
+  # PS4 is used for tracing a script in debug mode
+  PS4='\[${DARKGRAY}\]+\[${NOCOLOR}\] '
+}
+PROMPT_COMMAND='__setprompt'
 
-if [ "$color_prompt" = yes ]; then
-#Original Mint:    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
-#Geen: PS1='\[\e[0;92m\e[40m\]\u@\[\e[1;30m\e[42m\]\h \[\e[0;92m\e[40m\]\w\[\e[00m\] '
-#Green with red host:
-PS1='\[\e[0;92m\]\u@\[\e[1;31m\]\h \[\e[0;92m\]\w\[\e[00m\] '
-else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-fi
-unset color_prompt force_color_prompt
+alias grep="/bin/grep $GREP_OPTIONS"
+unset GREP_OPTIONS
 
-# If this is an xterm set the title to user@host:dir
-case "$TERM" in
-xterm*|rxvt*)
-    PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
-    ;;
-*)
-    ;;
-esac
-
-
-
-
-
-
-
+#clear && cat /etc/motd
+clear && /bin/bash ~/.dynmotd.sh
