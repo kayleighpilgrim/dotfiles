@@ -1,0 +1,5 @@
+[kayleigh@kayleighpilgrim.net]
+config_file = /home/kayleigh/.config/onedrive/accounts/kayleigh@kayleighpilgrim.net/config
+auto_sync = True
+account_type = Business
+free_space = 606.3GiB
