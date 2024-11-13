@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Bitwarden
+Type=Application
+Exec=/usr/bin/flatpak run --branch=stable --arch=x86_64 --command=bitwarden --file-forwarding com.bitwarden.desktop @@u %U @@
+Terminal=false
+Comment=Bitwarden password manager
+Categories=Utility
