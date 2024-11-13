@@ -67,7 +67,7 @@ ${color FF0000}W1     ${execpi 3600 ping -c 1 w1.abs.gd > /dev/null && echo '${c
 ${voffset 20}${color FFFF00}${font monospace:pixelsize=20}WEATHER${font monospace:normal:pixelsize=16}
 ${voffset 6}${color FF0000}TODO
 ${voffset 20}${color FFFF00}${font monospace:pixelsize=20}NOTIFICATIONS${font monospace:normal:pixelsize=16}
-${voffset 6}${color FF0000}Email TODO
+${voffset 6}${color FF0000}Email ${color 00FF00}${execpi 3600 php check-mail.php | xargs echo -n}
 ${color FF0000}Tasks TODO
 
 
