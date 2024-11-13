@@ -33,7 +33,8 @@ conky.config = {
 
 conky.text = [[
 ${color 00FF00}${font monospace:pixelsize=20}${execpi 1 date -R}
-${voffset 6}${color FF0000}${desktop_name}
+${voffset 6}${execpi 3600 ddate | awk -F',' {'print $1'}}
+${voffset 20}${color FF0000}${desktop_name}
 ${voffset 20}${color FFFF00}${font monospace:pixelsize=20}SYSTEM${font}
 ${voffset 6}${color FF0000}Host   ${color 00FF00}${execpi 3600 hostname -f}
 ${color FF0000}Uptime ${color 00FF00}${uptime}
@@ -55,12 +56,10 @@ ${voffset 12}${color FF0000}Battery ${color 00FF00}${battery_percent BAT1}${colo
 ${voffset 20}${color FFFF00}${font monospace:pixelsize=20}INFRASTRUCTURE${font}
 ${voffset 6}${color FF0000}DAEMON ${execpi 5 ping -c 1 daemon.abs.gd > /dev/null && echo '${color 00FF00}ONLINE' || echo '${color FF0000}OFFLINE'}  ${color FF0000}PING  ${color 00FF00}${tcp_ping abs.gd 99991}
 ${color FF0000}W1     ${execpi 5 ping -c 1 w1.abs.gd > /dev/null && echo '${color 00FF00}ONLINE' || echo '${color FF0000}OFFLINE'}  ${color FF0000}HTTPS ${execpi 5 curl https://kayleighpilgrim.net > /dev/null && echo '${color 00FF00}ONLINE' || echo '${color FF0000}OFFLINE'}
-${voffset 20}${color FFFF00}${font monospace:pixelsize=20}WEATHER${font}
-${voffset 6}${color FF0000}TODO
 ${voffset 20}${color FFFF00}${font monospace:pixelsize=20}NOTIFICATIONS${font}
 ${voffset 6}${color FF0000}Email ${color 00FF00}${execpi 60 php check-mail.php | xargs echo -n}
-#${color FF0000}Tasks TODO
-
+${voffset 20}${color FFFF00}${font monospace:pixelsize=20}WEATHER${font}
+${voffset 6}${font}${color 00FF00}${execpi 300 curl wttr.in/Mechelen?T0 --silent --max-time 3}
 
 # THINGS TO ADD IN SECOND CONKY
 # apache error log
