@@ -1,0 +1,9 @@
+[W1]
+host=w1.abs.gd
+folder=/home/kayleigh
+user=kayleigh
+scheme=sftp
+share=
+domain=
+path=
+port=18981
