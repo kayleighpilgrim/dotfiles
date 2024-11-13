@@ -30,45 +30,45 @@ conky.config = {
   minimum_height = 0
 }
 
+template0 = [[$12]]
+template1 = [[1: ${fs_used 2} / ${fs_size 2}]]
+template2 = [[1 2]]
+
 conky.text = [[
 ${color 00FF00}${font monospace:bold:pixelsize=20}${execpi 3600 date -R}
-${color FF0000}${desktop_name}
-
-${color FFFF00}${font monospace:bold:pixelsize=20}SYSTEM${font monospace:normal:pixelsize=14}
-${color FF0000}Host:   ${color 00FF00}${execpi 3600 hostname -f}
-${color FF0000}Uptime: ${color 00FF00}${uptime}
-${color FF0000}OS:     ${color 00FF00}${execpi 3600 lsb_release -a | grep 'Description' | awk -F':' '{printf $2}' | xargs echo -n}
-${color FF0000}Kernel: ${color 00FF00}${execpi 3600 uname -srm}
-
-${color FF0000}Int IPv4: ${color 00FF00}${execpi 3600 /sbin/ifconfig | grep 'inet ' | grep -v '127.' | awk -F' ' '{print $2}' | xargs echo -n}
-${color FF0000}Ext IPv4: ${color 00FF00}${execpi 3600 wget https://v4.ident.me/ -O - -q | xargs echo -n}
-${color FF0000}Ext IPv6: ${color 00FF00}${execpi 3600 wget https://v6.ident.me/ -O - -q | xargs echo -n}
-${color FF0000}WiFi:     ${color 00FF00}${wireless_essid wlo1} ${alignr}${color 00FF00}${wireless_link_bar 12,140 wlo1)}
-
-${color FF0000}/    ${color 00FF00}${fs_used /} ${color FF0000}/ ${color 00FF00}${fs_size /}${alignr}${fs_bar 12,140 /}
+${voffset 6}${color FF0000}${desktop_name}
+${voffset 20}${color FFFF00}${font monospace:bold:pixelsize=20}SYSTEM${font monospace:normal:pixelsize=14}
+${voffset 6}${color FF0000}Host   ${color 00FF00}${execpi 3600 hostname -f}
+${color FF0000}Uptime ${color 00FF00}${uptime}
+${color FF0000}OS     ${color 00FF00}${execpi 3600 lsb_release -a | grep 'Description' | awk -F':' '{printf $2}' | xargs echo -n}
+${color FF0000}Kernel ${color 00FF00}${execpi 3600 uname -srm}
+${voffset 12}${color FF0000}Int IPv4 ${color 00FF00}${execpi 3600 /sbin/ifconfig | grep 'inet ' | grep -v '127.' | awk -F' ' '{print $2}' | xargs echo -n}  ${color FF0000}Def. GW ${color 00FF00}${gw_ip}
+${color FF0000}Ext IPv4 ${color 00FF00}${execpi 3600 wget https://v4.ident.me/ -O - -q | xargs echo -n}
+${color FF0000}Ext IPv6 ${color 00FF00}${execpi 3600 wget https://v6.ident.me/ -O - -q | xargs echo -n}
+${color FF0000}WiFi     ${color 00FF00}${wireless_essid wlo1} ${alignr}${color 00FF00}${wireless_link_bar 12,140 wlo1)}
+${voffset 12}${color FF0000}/    ${color 00FF00}${fs_used /} ${color FF0000}/ ${color 00FF00}${fs_size /}${alignr}${fs_bar 12,140 /}
 ${color FF0000}DATA ${color 00FF00}${fs_used /home/kayleigh/data} ${color FF0000}/ ${color 00FF00}${fs_size /home/kayleigh/data}${alignr}${fs_bar 12,140 /home/kayleigh/data}
 ${color FF0000}ENCR ${color 00FF00}${fs_used /media/kayleigh/USB} ${color FF0000}/ ${color 00FF00}${fs_size /media/kayleigh/USB}${alignr}${fs_bar 12,140 /media/kayleigh/USB}
+${voffset 12}${color FF0000}CPU   ${color 00FF00}${cpu cpu0}${color FF0000}% ${color 00FF00}${acpitemp}${color FF0000}C ${color 00FF00}${freq}${color FF0000}MHz  ${color 00FF00}${alignr}${cpubar cpu0 12,140}
+${color FF0000}Load  ${color 00FF00}${execpi 3600 /bin/cat /proc/loadavg | awk {'print $1'}}${color FF0000},${color 00FF00}${execpi 3600 /bin/cat /proc/loadavg | awk {'print $2'}}${color FF0000},${color 00FF00}${execpi 3600 /bin/cat /proc/loadavg | awk {'print $3'}}
+${color FF0000}Procs ${color 00FF00}$processes${color FF0000}  Running ${color 00FF00}$running_processes
+${voffset 12}${color FF0000}RAM  ${color 00FF00}${execpi 3600 free -h | grep Mem | awk -F' ' '{print $4}'}${color FF0000} free (${color 00FF00}${execpi 3600 free -h | grep Mem | awk -F' ' '{print $3}'}${color FF0000}/${color 00FF00}${execpi 3600 free -h | grep Mem | awk -F' ' '{print $2}'}${color FF0000})${color 00FF00}${alignr}${membar 12,140}
+${color FF0000}SWAP ${color 00FF00}${execpi 3600 free -h | grep Swap | awk -F' ' '{print $4}'}${color FF0000} free (${color 00FF00}${execpi 3600 free -h | grep Swap | awk -F' ' '{print $3}'}${color FF0000}/${color 00FF00}${execpi 3600 free -h | grep Swap | awk -F' ' '{print $2}'}${color FF0000})${color 00FF00}${alignr}${swapbar 12,140}
+${voffset 12}${color FF0000}Battery ${color 00FF00}${battery_percent BAT1}${color FF0000}%${color 00FF00}${alignr}${battery_bar 12,140 BAT1}
+${voffset 20}${color FFFF00}${font monospace:bold:pixelsize=20}INFRASTRUCTURE${font monospace:normal:pixelsize=14}
+${voffset 6}${color FF0000}DAEMON ${execpi 3600 ping -c 1 daemon.abs.gd > /dev/null && echo '${color 00FF00}ONLINE' || echo '${color FF0000}OFFLINE'}  ${color FF0000}PING  ${color 00FF00}${tcp_ping abs.gd 99991}
+${color FF0000}W1     ${execpi 3600 ping -c 1 w1.abs.gd > /dev/null && echo '${color 00FF00}ONLINE' || echo '${color FF0000}OFFLINE'}  ${color FF0000}HTTPS ${execpi 3600 curl https://kayleighpilgrim.net > /dev/null && echo '${color 00FF00}ONLINE' || echo '${color FF0000}OFFLINE'}
+${voffset 20}${color FFFF00}${font monospace:bold:pixelsize=20}WEATHER${font monospace:normal:pixelsize=14}
+${voffset 6}${color FF0000}TODO
+${voffset 20}${color FFFF00}${font monospace:bold:pixelsize=20}NOTIFICATIONS${font monospace:normal:pixelsize=14}
+${voffset 6}${color FF0000}Email TODO
+${color FF0000}Tasks TODO
 
-${color FF0000}CPU:  ${color 00FF00}${cpu cpu0}${color FF0000}% ${color 00FF00}${acpitemp}${color FF0000}C ${color 00FF00}${freq}${color FF0000}MHz  ${color 00FF00}${alignr}${cpubar cpu0 12,140}
-${color FF0000}Load: ${color 00FF00}${execpi 3600 /bin/cat /proc/loadavg | awk {'print $1'}}${color FF0000},${color 00FF00}${execpi 3600 /bin/cat /proc/loadavg | awk {'print $2'}}${color FF0000},${color 00FF00}${execpi 3600 /bin/cat /proc/loadavg | awk {'print $3'}}
-${color FF0000}Processes: ${color 00FF00}$processes${color FF0000} Running: ${color 00FF00}$running_processes
 
-${color FF0000}RAM:  ${color 00FF00}${execpi 3600 free -h | grep Mem | awk -F' ' '{print $4}'}${color FF0000} free (${color 00FF00}${execpi 3600 free -h | grep Mem | awk -F' ' '{print $3}'}${color FF0000}/${color 00FF00}${execpi 3600 free -h | grep Mem | awk -F' ' '{print $2}'}${color FF0000})${color 00FF00}${alignr}${membar 12,140}
-${color FF0000}SWAP: ${color 00FF00}${execpi 3600 free -h | grep Swap | awk -F' ' '{print $4}'}${color FF0000} free (${color 00FF00}${execpi 3600 free -h | grep Swap | awk -F' ' '{print $3}'}${color FF0000}/${color 00FF00}${execpi 3600 free -h | grep Swap | awk -F' ' '{print $2}'}${color FF0000})${color 00FF00}${alignr}${swapbar 12,140}
-
-${color FF0000}Battery: ${color 00FF00}${battery_percent BAT1}${color FF0000}%${color 00FF00}${alignr}${battery_bar 12,140 BAT1}
-
-
-${color FFFF00}${font monospace:bold:pixelsize=20}INFRASTRUCTURE${font monospace:normal:pixelsize=14}
-${color FF0000}Daemon: ${execpi 3600 ping -c 1 daemon.abs.gd > /dev/null && echo '${color 00FF00}ONLINE' || echo '${color FF0000}OFFLINE'}
-${color FF0000}W1:     ${execpi 3600 ping -c 1 w1.abs.gd > /dev/null && echo '${color 00FF00}ONLINE' || echo '${color FF0000}OFFLINE'}  ${color FF0000}HTTPS: ${execpi 3600 curl https://kayleighpilgrim.net > /dev/null && echo '${color 00FF00}ONLINE' || echo '${color FF0000}OFFLINE'}
-
-${color FFFF00}${font monospace:bold:pixelsize=20}WEATHER${font monospace:normal:pixelsize=14}
-${color FF0000}TODO
-
-${color FFFF00}${font monospace:bold:pixelsize=20}NOTIFICATIONS${font monospace:normal:pixelsize=14}
-${color FF0000}Email: TODO
-${color FF0000}Tasks: TODO
-
-${github_notifications}
+# THINGS TO ADD IN SECOND CONKY
+# apache error log
+#${tail /var/log/apache2/error.log 3}
+# rss feed monitoring + rss feed news
+#${rssuriinterval_in_secondsaction(num_par (spaces_in_front))}
+# Download and parse RSS feeds. The interval may be a (floating point) value greater than 0. Action may be one of the following: feed_title, item_title (with num par), item_desc (with num par) and item_titles (when using this action and spaces_in_front is given conky places that many spaces in front of each item). This object is threaded, and once a thread is created it can't be explicitly destroyed. One thread will run for each URI specified. You can use any protocol that Curl supports.
 ]];
