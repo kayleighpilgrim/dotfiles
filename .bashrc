@@ -291,6 +291,143 @@ trim() {
   echo -n "$var"
 }
 
+# Run `dig` and display the most useful info
+digga() {
+	dig +nocmd "$1" any +multiline +noall +answer
+}
+
+# Show all the names (CNs and SANs) listed in the SSL certificate for a given domain
+getcertnames() {
+	if [ -z "${1}" ]; then
+		echo "ERROR: No domain specified."
+		return 1
+	fi
+
+	local domain="${1}"
+	echo "Testing ${domain}…"
+	echo "";
+
+	local tmp
+	tmp=$(echo -e "GET / HTTP/1.0\\nEOT" \
+		| openssl s_client -connect "${domain}:443" 2>&1)
+
+	if [[ "${tmp}" = *"-----BEGIN CERTIFICATE-----"* ]]; then
+		local certText
+		certText=$(echo "${tmp}" \
+			| openssl x509 -text -certopt "no_header, no_serial, no_version, \
+			no_signame, no_validity, no_issuer, no_pubkey, no_sigdump, no_aux")
+		echo "Common Name:"
+		echo "";
+		echo "${certText}" | grep "Subject:" | sed -e "s/^.*CN=//"
+		echo "";
+		echo "Subject Alternative Name(s):"
+		echo "";
+		echo "${certText}" | grep -A 1 "Subject Alternative Name:" \
+			| sed -e "2s/DNS://g" -e "s/ //g" | tr "," "\\n" | tail -n +2
+		return 0
+	else
+		echo "ERROR: Certificate not found."
+		return 1
+	fi
+}
+
+# `o` with no arguments opens the current directory, otherwise opens the given location
+o() {
+	if [ $# -eq 0 ]; then
+		xdg-open .	> /dev/null 2>&1
+	else
+		xdg-open "$@" > /dev/null 2>&1
+	fi
+}
+
+
+# `tre` is a shorthand for `tree` with hidden files and color enabled, ignoring
+# the `.git` directory, listing directories first. The output gets piped into
+# `less` with options to preserve color and line numbers, unless the output is
+# small enough for one screen.
+tre() {
+	tree -aC -I '.git' --dirsfirst "$@" | less -FRNX
+}
+
+# Call from a local repo to open the repository on github/bitbucket in browser
+# Modified version of https://github.com/zeke/ghwd
+repo() {
+	# Figure out github repo base URL
+	local base_url
+	base_url=$(git config --get remote.origin.url)
+	base_url=${base_url%\.git} # remove .git from end of string
+
+	# Fix git@github.com: URLs
+	base_url=${base_url//git@github\.com:/https:\/\/github\.com\/}
+
+	# Fix git://github.com URLS
+	base_url=${base_url//git:\/\/github\.com/https:\/\/github\.com\/}
+
+	# Fix git@bitbucket.org: URLs
+	base_url=${base_url//git@bitbucket.org:/https:\/\/bitbucket\.org\/}
+
+	# Fix git@gitlab.com: URLs
+	base_url=${base_url//git@gitlab\.com:/https:\/\/gitlab\.com\/}
+
+	# Validate that this folder is a git folder
+	if ! git branch 2>/dev/null 1>&2 ; then
+		echo "Not a git repo!"
+		exit $?
+	fi
+
+	# Find current directory relative to .git parent
+	full_path=$(pwd)
+	git_base_path=$(cd "./$(git rev-parse --show-cdup)" || exit 1; pwd)
+	relative_path=${full_path#$git_base_path} # remove leading git_base_path from working directory
+
+	# If filename argument is present, append it
+	if [ "$1" ]; then
+		relative_path="$relative_path/$1"
+	fi
+
+	# Figure out current git branch
+	# git_where=$(command git symbolic-ref -q HEAD || command git name-rev --name-only --no-undefined --always HEAD) 2>/dev/null
+	git_where=$(command git name-rev --name-only --no-undefined --always HEAD) 2>/dev/null
+
+	# Remove cruft from branchname
+	branch=${git_where#refs\/heads\/}
+	branch=${branch#remotes\/origin\/}
+
+	[[ $base_url == *bitbucket* ]] && tree="src" || tree="tree"
+	url="$base_url/$tree/$branch$relative_path"
+
+
+	echo "Calling $(type open) for $url"
+
+	open "$url" &> /dev/null || (echo "Using $(type open) to open URL failed." && exit 1);
+}
+
+# Use feh to nicely view images
+openimage() {
+	local types='*.jpg *.JPG *.png *.PNG *.gif *.GIF *.jpeg *.JPEG'
+
+	cd "$(dirname "$1")" || exit
+	local file
+	file=$(basename "$1")
+
+	feh -q "$types" --auto-zoom \
+		--sort filename --borderless \
+		--scale-down --draw-filename \
+		--image-bg black \
+		--start-at "$file"
+}
+
+# check if uri is up
+isup() {
+	local uri=$1
+
+	if curl -s --head  --request GET "$uri" | grep "200 OK" > /dev/null ; then
+		notify-send --urgency=critical "$uri is down"
+	else
+		notify-send --urgency=low "$uri is up"
+	fi
+}
+
 
 
 
