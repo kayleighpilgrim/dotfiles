@@ -52,6 +52,7 @@ ${color FF0000}Load  ${color 00FF00}${execpi 1 /bin/cat /proc/loadavg | awk {'pr
 ${color FF0000}Procs ${color 00FF00}${processes}${color FF0000}  Running ${color 00FF00}${running_processes}
 ${voffset 12}${color FF0000}RAM  ${color 00FF00}${memeasyfree}${color FF0000} free ${color 00FF00}${mem}${color FF0000} used${color 00FF00}${alignr}${membar}
 ${color FF0000}SWAP ${color 00FF00}${swapfree}${color FF0000} free ${color 00FF00}${swap}${color FF0000} used${color 00FF00}${alignr}${swapbar}
+${voffset 12}${color FF0000}GPU temp ${color 00FF00}${nvidia gputemp}${color FF0000}C
 ${voffset 12}${color FF0000}Battery ${color 00FF00}${battery_percent BAT1}${color FF0000}%${color 00FF00}${alignr}${battery_bar BAT1}
 ${voffset 20}${color FFFF00}${font monospace:pixelsize=20}INFRASTRUCTURE${font}
 ${voffset 6}${color FF0000}DAEMON ${execpi 5 ping -c 1 daemon.abs.gd > /dev/null && echo '${color 00FF00}ONLINE' || echo '${color FF0000}OFFLINE'}  ${color FF0000}PING  ${color 00FF00}${tcp_ping abs.gd 99991}
