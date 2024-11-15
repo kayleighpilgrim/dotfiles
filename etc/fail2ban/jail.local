@@ -41,7 +41,8 @@ action = %(action_)s
 [sshd]
 port = 1898,18981,80,443,8006
 enabled = true
-backend = systemd
+logpath = %(sshd_log)s
+backend = %(sshd_backend)s
 
 [pam-generic]
 port = 1898,18981,80,443,8006
@@ -53,7 +54,9 @@ backend = %(syslog_backend)s
 [xinetd-fail]
 port = 1898,18981,80,443,8006
 enabled = true
-logpath = %(syslog_daemon)s
+#logpath = %(syslog_daemon)s
+# debian
+logpath = /var/log/syslog
 backend = %(syslog_backend)s
 
 
