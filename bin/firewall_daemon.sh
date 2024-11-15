@@ -156,13 +156,13 @@ if [ "$SYSCTL" = "" ]; then echo "1" > /proc/sys/net/ipv4/tcp_syncookies; else $
 if [ "$SYSCTL" = "" ]; then echo "1" > /proc/sys/net/ipv4/icmp_echo_ignore_broadcasts; else $SYSCTL net.ipv4.icmp_echo_ignore_broadcasts="1"; fi
 # This option can be used to accept or refuse source routed packets.  It is usually on by
 # default, but is generally considered a security risk.  This option turns it off.    TODO:
-#if [ "$SYSCTL" = "" ]; then echo "0" > /proc/sys/net/ipv4/conf/all/accept_source_route; else $SYSCTL net.ipv4.conf.all.accept_source_route="0"; fi
+if [ "$SYSCTL" = "" ]; then echo "0" > /proc/sys/net/ipv4/conf/all/accept_source_route; else $SYSCTL net.ipv4.conf.all.accept_source_route="0"; fi
 # This option can disable ICMP redirects.  ICMP redirects are generally considered a
 # security risk and shouldn't be needed by most systems using this script.
 #if [ "$SYSCTL" = "" ]; then echo "0" > /proc/sys/net/ipv4/conf/all/accept_redirects; else $SYSCTL net.ipv4.conf.all.accept_redirects="0"; fi
 # However, we'll ensure the secure_redirects option is on instead.  This option accepts
 # only from gateways in the default gateways list.    TODO:
-#if [ "$SYSCTL" = "" ]; then echo "1" > /proc/sys/net/ipv4/conf/all/secure_redirects; else $SYSCTL net.ipv4.conf.all.secure_redirects="1"; fi
+if [ "$SYSCTL" = "" ]; then echo "1" > /proc/sys/net/ipv4/conf/all/secure_redirects; else $SYSCTL net.ipv4.conf.all.secure_redirects="1"; fi
 # This option logs packets from impossible addresses.    TODO:
 #if [ "$SYSCTL" = "" ]; then echo "1" > /proc/sys/net/ipv4/conf/all/log_martians; else $SYSCTL net.ipv4.conf.all.log_martians="1"; fi
 
@@ -184,9 +184,9 @@ $IPT -F
 $IPT -t nat -F
 $IPT -t mangle -F
 # Erase all non-default chains
-$IPT -X
+#$IPT -X
 #$IPT -t nat -X
-$IPT -t mangle -X
+#$IPT -t mangle -X
 # If we only want to stop the firewall.
 if [ "$1" = "stop" ]; then
   exit 0
