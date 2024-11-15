@@ -516,7 +516,7 @@ backend = %(postfix_backend)s
 
 # stunnel - need to set port for this
 #[stunnel]
-logpath = /var/log/stunnel4/stunnel.log
+#logpath = /var/log/stunnel4/stunnel.log
 
 #[ejabberd-auth]
 #port    = 5222
