@@ -490,7 +490,7 @@ iptables -t nat -A PREROUTING -i vmbr0 -p tcp --dport 18981 -j DNAT --to-destina
 iptables -t nat -A PREROUTING -i vmbr0 -p tcp --dport 80 -j DNAT --to-destination 10.0.1.2:80
 iptables -t nat -A PREROUTING -i vmbr0 -p tcp --dport 443 -j DNAT --to-destination 10.0.1.2:443
 # vmbr4 > vmbr1
-post-up iptables -t nat -A POSTROUTING -s 10.0.2.0/24 -o vmbr1 -j MASQUERADE
+iptables -t nat -A POSTROUTING -s 10.0.2.0/24 -o vmbr1 -j MASQUERADE
 
 
 #########################################################################################
