@@ -367,7 +367,7 @@ $IPT -A udp_outbound -p UDP -s 0/0 -j ACCEPT
 for PORT in "${TCP_ALLOWED[@]}"; do
   $IPT -A tcp_inbound -p TCP -s 0/0 --destination-port "${PORT}" -j ACCEPT
 done
-%# Not matched, so return so it will be dropped and logged
+# Not matched, so return so it will be dropped and logged
 $IPT -A tcp_inbound -p TCP -j RETURN
 
 ######################
@@ -483,7 +483,7 @@ $IPT -A OUTPUT -p ALL -j ACCEPT
 
 #########################################################################################
 # Start Fail2ban    TODO: BETTER IN BEGINNING, BUT THEN THE FIREWALL TAKES TO LONG      #
-######################################################################################### -%>
+#########################################################################################
 service fail2ban start
 
 #<% if @f2b10 == 'true' -%>
