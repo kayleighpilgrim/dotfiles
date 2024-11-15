@@ -76,11 +76,6 @@ port = 1898,18981,80,443,8006
 enabled = false
 logpath = %(nginx_access_log)s
 
-[nginx-http-auth]
-port = 1898,18981,80,443,8006
-mode = false
-logpath = %(nginx_error_log)s
-
 
 ###########
 # PROXMOX #
