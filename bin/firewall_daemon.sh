@@ -185,7 +185,7 @@ $IPT -t nat -F
 $IPT -t mangle -F
 # Erase all non-default chains
 $IPT -X
-$IPT -t nat -X
+#$IPT -t nat -X
 $IPT -t mangle -X
 # If we only want to stop the firewall.
 if [ "$1" = "stop" ]; then
